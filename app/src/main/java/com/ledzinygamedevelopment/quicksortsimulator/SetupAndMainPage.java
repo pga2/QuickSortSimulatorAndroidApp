@@ -75,10 +75,9 @@ public class SetupAndMainPage extends Fragment {
         add_numberButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                numbersForCreator = edit_numbers_in_array.getText().toString().split(",");
+                numbersForCreator = edit_numbers_in_array.getText().toString().split("\\.");
                 LinkedList<String> tempList = new LinkedList<>(Arrays.asList(numbersForCreator));
                 tempList.removeAll(Arrays.asList(""));
-
                 hashMapForCreator = new LinkedHashMap<>();
                 int i = 0;
                 for(String value : tempList) {

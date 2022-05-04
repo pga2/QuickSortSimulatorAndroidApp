@@ -30,8 +30,6 @@ public class Simulation extends Fragment {
     private SetupAndMainPage setupAndMainPage;
 
     private enum QuickSortListPart {SHOW_PIWOT, SHOW_GREATER_NUMBERS, MOVE_GREATER_NUMBERS}
-
-    ;
     private QuickSortListPart currentState;
     private LinkedHashMap<Integer, Integer> numbersWithId;
     private LinkedList<LinkedHashMap<Integer, Integer>> allRequrencyQuickSortData;
@@ -97,6 +95,7 @@ public class Simulation extends Fragment {
                                 refreshTextViews(allRequrencyQuickSortData);
                                 TextView pivot = relativeLayout.findViewById(allRequrencyQuickSortData.get(currentSortingArray).get(HIGH_KEY_POSITION));
                                 setColor(pivot, Color.RED);
+
                                 currentState = QuickSortListPart.SHOW_GREATER_NUMBERS;
                                 break;
                             case SHOW_GREATER_NUMBERS:
@@ -109,6 +108,7 @@ public class Simulation extends Fragment {
                                         setColor(higherNumber, Color.GRAY);
                                     }
                                 }
+
                                 currentState = QuickSortListPart.MOVE_GREATER_NUMBERS;
                                 break;
                             case MOVE_GREATER_NUMBERS:
@@ -189,6 +189,7 @@ public class Simulation extends Fragment {
                                     newAllNumbersMap.add(allRequrencyQuickSortData.get(i));
                                 }
                                 allRequrencyQuickSortData = newAllNumbersMap;
+
                                 currentState = QuickSortListPart.SHOW_PIWOT;
                                 break;
                         }
@@ -199,12 +200,7 @@ public class Simulation extends Fragment {
                         final Toast toast = Toast.makeText(getActivity(), "This part of array is to small to sort", Toast.LENGTH_SHORT);
                         toast.show();
                         Handler handler = new Handler();
-                        handler.postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                toast.cancel();
-                            }
-                        }, 200);
+                        handler.postDelayed(() -> toast.cancel(), 200);
                         currentSortingArray++;
                     }
                 } else {
@@ -228,7 +224,7 @@ public class Simulation extends Fragment {
     }
 
     public static <T> ArrayList<Integer> getByIndex(LinkedHashMap<Integer, T> hMap) {
-        return new ArrayList<Integer>(hMap.keySet());
+        return new ArrayList<>(hMap.keySet());
     }
 
     private static void setColor(TextView textView, int color) {

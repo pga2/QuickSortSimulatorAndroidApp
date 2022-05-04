@@ -43,13 +43,7 @@ public class ListViewCreator {
             }
         }
         numbers = numbersForCreator;
-        if(!(numbers.size() <= 1) && !(numbers.get(Simulation.<String>getByIndex(numbersForCreator).get(1)).equals(""))) {
-            float fullNumbersWidth = 0;
-            for (String number : numbers.values()) {
-                fullNumbersWidth += number.length() * NUMBER_INPUT_WIDTH_MULTIPLIER + 40;
-            }
-            float screenMiddle = Resources.getSystem().getDisplayMetrics().widthPixels / 2 - 100 / 2;
-            LinkedList<TextView> textViews = new LinkedList<>();
+        if(!(numbers.size() < 1) && !(numbers.get(Simulation.<String>getByIndex(numbersForCreator).get(0)).equals(""))) {
 
             LinkedList<LinkedHashMap<Integer, String>> eachNumbersRow = new LinkedList<>();
             LinkedList<Float> eachRowWidth = new LinkedList<>();
@@ -98,7 +92,6 @@ public class ListViewCreator {
 
             textView.setId(Simulation.getByIndex(numbersPart).get(i)); //Set id to remove in the future.
 
-            //textViewId++;
             textView.setPadding(10,10,10,10);
 
             textView.setBackgroundResource(R.drawable.rounded_croners);
@@ -106,12 +99,10 @@ public class ListViewCreator {
             int nightModeFlags = context.getResources().getConfiguration().uiMode &
                     Configuration.UI_MODE_NIGHT_MASK;
             if(nightModeFlags == Configuration.UI_MODE_NIGHT_NO) {
-                //textView.setBackgroundColor(resources.getColor(R.color.purple_500));
                 drawable.setColor(resources.getColor(R.color.purple_500));
 
                 textView.setTextColor(resources.getColor(R.color.white));
             } else {
-                //textView.setBackgroundColor(resources.getColor(R.color.purple_200));
                 drawable.setColor(resources.getColor(R.color.purple_200));
                 textView.setTextColor(resources.getColor(R.color.black));
             }
@@ -121,10 +112,6 @@ public class ListViewCreator {
             float distFromRightScreenSide = 0;
             for(int j = 0; j < i; j++) {
                 distFromRightScreenSide += (((float) Resources.getSystem().getDisplayMetrics().widthPixels * (float) (numbersPart.get(Simulation.<String>getByIndex(numbersPart).get(j)).length()*NUMBER_INPUT_WIDTH_MULTIPLIER) / 480f)+((float) Resources.getSystem().getDisplayMetrics().widthPixels * 0.0833f));
-                if(i == 4) {
-                //System.out.println("first part: " + ((float) Resources.getSystem().getDisplayMetrics().widthPixels * 0.0833f));
-                //System.out.println("second part:" + (float) Resources.getSystem().getDisplayMetrics().widthPixels * (float) (numbersPart.get(j).length()*NUMBER_INPUT_WIDTH_MULTIPLIER) / 480f);
-                }
             }
 
             RelativeLayout.LayoutParams lParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,
@@ -136,15 +123,9 @@ public class ListViewCreator {
             textView.setGravity(Gravity.CENTER);
             textView.setLayoutParams(lParams);
 
-
-
             textViews.add(textView);
         }
         return textViews;
-    }
-
-    public GradientDrawable getDrawable() {
-        return drawable;
     }
 
     public int getNumbersSize() {

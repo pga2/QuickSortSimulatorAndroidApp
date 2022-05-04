@@ -15,8 +15,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:digits="0123456789,"
-        android:hint="Type each number separate by ,"
+        android:digits="0123456789."
+        android:inputType="numberDecimal"
+        android:hint="@string/edit_text_setup_simulator"
         android:textSize="24sp" />
 
     <Button
