@@ -33,7 +33,7 @@ public class ListViewCreator {
     private GradientDrawable drawable;
     private int allNumbersSize = 0;
 
-    public void createButtons(RelativeLayout relativeLayout, View view, LinkedHashMap<Integer, String> numbersForCreator, FragmentActivity activity, Resources resources, Context context) {
+    public void createButtons(RelativeLayout relativeLayout, View view, LinkedHashMap<Integer, String> numbersForCreator, FragmentActivity activity, Resources resources, Context context, int rowChanger) {
         if(numbersForCreator.size() > allNumbersSize) {
             allNumbersSize = numbersForCreator.size();
         }
@@ -69,7 +69,7 @@ public class ListViewCreator {
                     currentArrayPosition = i + 1;
                 }
             }
-            int row = eachNumbersRow.size();
+            int row = eachNumbersRow.size() + rowChanger;
             LinkedList<TextView> allTextViews = new LinkedList<>();
             for (int i = 0; i < eachNumbersRow.size(); i++) {
                 allTextViews.addAll(createEachRowOfNumbers(eachNumbersRow.get(i), --row, activity, resources, context));
