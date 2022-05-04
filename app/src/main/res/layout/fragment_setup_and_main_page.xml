@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/frameLayout2"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="20dp"
+    tools:context=".SetupAndMainPage">
+
+
+    <EditText
+
+        android:id="@+id/edit_numbers_in_array"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:digits="0123456789.,"
+        android:hint="Each number or separate by , or ."
+        android:textSize="24sp" />
+
+    <Button
+        android:id="@+id/add_number"
+        android:layout_width="103dp"
+        android:layout_height="60dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginLeft="128dp"
+        android:layout_marginTop="510dp"
+        android:layout_marginRight="128dp"
+        android:text="@string/add_number" />
+
+    <Button
+        android:id="@+id/start_simulation_button"
+        android:layout_width="299dp"
+        android:layout_height="138dp"
+        android:layout_marginTop="576dp"
+        android:text="@string/start_simulation"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true" />
+
+
+</RelativeLayout>
