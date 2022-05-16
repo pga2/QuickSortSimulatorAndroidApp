@@ -85,7 +85,7 @@ public class SetupAndMainPage extends Fragment {
                     hashMapForCreator.put(i, value);
                 }
                 numbersForCreator = tempList.toArray(new String[0]);
-                listViewCreator.createButtons(relativeLayout, view, hashMapForCreator, getActivity(), getResources(), getContext(), 0);
+                listViewCreator.createButtons(relativeLayout, view, hashMapForCreator, getActivity(), getResources(), getContext(), 0, null);
             }
         });
         return view;

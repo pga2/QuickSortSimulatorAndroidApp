@@ -54,7 +54,7 @@ public class Simulation extends Fragment {
         view = inflater.inflate(R.layout.fragment_simulation, container, false);
 
         relativeLayout = view.findViewById(R.id.frameLayout);
-        listViewCreator.createButtons(relativeLayout, view, setupAndMainPage.getHashMapForCreator(), getActivity(), getResources(), getContext(), -2);
+        listViewCreator.createButtons(relativeLayout, view, setupAndMainPage.getHashMapForCreator(), getActivity(), getResources(), getContext(), -2, null);
         for (int i = 0; i < setupAndMainPage.getHashMapForCreator().size(); i++) {
             numbersWithId.put(getByIndex(setupAndMainPage.getHashMapForCreator()).get(i), Integer.valueOf(setupAndMainPage.getHashMapForCreator().get(getByIndex(setupAndMainPage.getHashMapForCreator()).get(i))));
         }
@@ -100,7 +100,7 @@ public class Simulation extends Fragment {
                                 break;
                             case SHOW_GREATER_NUMBERS:
                                 for (int i = 0; i < allRequrencyQuickSortData.get(currentSortingArray).size() - 3; i++) {
-                                    if (allRequrencyQuickSortData.get(currentSortingArray).get(getByIndex(allRequrencyQuickSortData.get(currentSortingArray)).get(i)) > allRequrencyQuickSortData.get(currentSortingArray).get(allRequrencyQuickSortData.get(currentSortingArray).get(-3))) {
+                                    if (allRequrencyQuickSortData.get(currentSortingArray).get(getByIndex(allRequrencyQuickSortData.get(currentSortingArray)).get(i)) >= allRequrencyQuickSortData.get(currentSortingArray).get(allRequrencyQuickSortData.get(currentSortingArray).get(-3))) {
                                         TextView higherNumber = relativeLayout.findViewById(getByIndex(allRequrencyQuickSortData.get(currentSortingArray)).get(i));
                                         setColor(higherNumber, Color.GREEN);
                                     } else if (allRequrencyQuickSortData.get(currentSortingArray).get(getByIndex(allRequrencyQuickSortData.get(currentSortingArray)).get(i)) < allRequrencyQuickSortData.get(currentSortingArray).get(allRequrencyQuickSortData.get(currentSortingArray).get(-3))) {
@@ -142,7 +142,6 @@ public class Simulation extends Fragment {
                                             mapForCreator.put(getByIndex(allRequrencyQuickSortData.get(i)).get(j), String.valueOf(allRequrencyQuickSortData.get(i).get(getByIndex(allRequrencyQuickSortData.get(i)).get(j))));
                                     }
                                 }
-                                listViewCreator.createButtons(relativeLayout, view, mapForCreator, getActivity(), getResources(), getContext(), -2);
 
                                 pivot = relativeLayout.findViewById(allRequrencyQuickSortData.get(currentSortingArray).get(HIGH_KEY_POSITION));
                                 setColor(pivot, Color.RED);
@@ -153,18 +152,15 @@ public class Simulation extends Fragment {
                                     if (newTempMap.get(getByIndex(newTempMap).get(i)) >= newTempMap.get(newTempMap.get(HIGH_KEY_POSITION))
                                             && getByIndex(newTempMap).get(i) != newTempMap.get(HIGH_KEY_POSITION)
                                             && (getByIndex(newTempMap).get(i) != HIGH_KEY_POSITION && getByIndex(newTempMap).get(i) != LOW_KEY_POSITION)) {
-                                        TextView textView = relativeLayout.findViewById(getByIndex(newTempMap).get(i));
-                                        setColor(textView, Color.GREEN);
                                         highPartMap.put(getByIndex(newTempMap).get(i), newTempMap.get(getByIndex(newTempMap).get(i)));
                                     } else if (getByIndex(newTempMap).get(i) != newTempMap.get(HIGH_KEY_POSITION)
                                             && (getByIndex(newTempMap).get(i) != HIGH_KEY_POSITION && getByIndex(newTempMap).get(i) != LOW_KEY_POSITION)) {
                                         lowPartMap.put(getByIndex(newTempMap).get(i), newTempMap.get(getByIndex(newTempMap).get(i)));
-                                        TextView textView = relativeLayout.findViewById(getByIndex(newTempMap).get(i));
-                                        setColor(textView, Color.GRAY);
                                     } else if (getByIndex(newTempMap).get(i) != HIGH_KEY_POSITION && getByIndex(newTempMap).get(i) != LOW_KEY_POSITION) {
                                         pivotMap.put(getByIndex(newTempMap).get(i), newTempMap.get(getByIndex(newTempMap).get(i)));
                                     }
                                 }
+
 
                                 if (lowPartMap.size() > 1) {
                                     lowPartMap.put(LOW_KEY_POSITION, 0);
@@ -189,7 +185,22 @@ public class Simulation extends Fragment {
                                     newAllNumbersMap.add(allRequrencyQuickSortData.get(i));
                                 }
                                 allRequrencyQuickSortData = newAllNumbersMap;
-
+                                listViewCreator.createButtons(relativeLayout, view, mapForCreator, getActivity(), getResources(), getContext(), -2, allRequrencyQuickSortData);
+                                for (int i = 0; i < newTempMap.size(); i++) {
+                                    if (newTempMap.get(getByIndex(newTempMap).get(i)) >= newTempMap.get(newTempMap.get(HIGH_KEY_POSITION))
+                                            && getByIndex(newTempMap).get(i) != newTempMap.get(HIGH_KEY_POSITION)
+                                            && (getByIndex(newTempMap).get(i) != HIGH_KEY_POSITION && getByIndex(newTempMap).get(i) != LOW_KEY_POSITION)) {
+                                        TextView textView = relativeLayout.findViewById(getByIndex(newTempMap).get(i));
+                                        setColor(textView, Color.GREEN);
+                                    } else if (getByIndex(newTempMap).get(i) != newTempMap.get(HIGH_KEY_POSITION)
+                                            && (getByIndex(newTempMap).get(i) != HIGH_KEY_POSITION && getByIndex(newTempMap).get(i) != LOW_KEY_POSITION)) {
+                                        TextView textView = relativeLayout.findViewById(getByIndex(newTempMap).get(i));
+                                        setColor(textView, Color.GRAY);
+                                    } else if (getByIndex(newTempMap).get(i) != HIGH_KEY_POSITION && getByIndex(newTempMap).get(i) != LOW_KEY_POSITION) {
+                                        TextView textView = relativeLayout.findViewById(getByIndex(newTempMap).get(i));
+                                        setColor(textView, Color.RED);
+                                    }
+                                }
                                 currentState = QuickSortListPart.SHOW_PIWOT;
                                 break;
                         }
@@ -200,7 +211,12 @@ public class Simulation extends Fragment {
                         final Toast toast = Toast.makeText(getActivity(), "This part of array is to small to sort", Toast.LENGTH_SHORT);
                         toast.show();
                         Handler handler = new Handler();
-                        handler.postDelayed(() -> toast.cancel(), 200);
+                        handler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                toast.cancel();
+                            }
+                        }, 200);
                         currentSortingArray++;
                     }
                 } else {
@@ -227,7 +243,7 @@ public class Simulation extends Fragment {
         return new ArrayList<>(hMap.keySet());
     }
 
-    private static void setColor(TextView textView, int color) {
+    public static void setColor(TextView textView, int color) {
         textView.setBackgroundResource(R.drawable.rounded_croners);
         GradientDrawable drawable = (GradientDrawable) textView.getBackground();
         drawable.setColor(color);
@@ -241,6 +257,7 @@ public class Simulation extends Fragment {
                     mapForCreator.put(key, String.valueOf(eachMap.get(key)));
             }
         }
-        listViewCreator.createButtons(relativeLayout, view, mapForCreator, getActivity(), getResources(), getContext(), -2);
+        listViewCreator.createButtons(relativeLayout, view, mapForCreator, getActivity(), getResources(), getContext(), -2, allRequrencyQuickSortData);
     }
+
 }
