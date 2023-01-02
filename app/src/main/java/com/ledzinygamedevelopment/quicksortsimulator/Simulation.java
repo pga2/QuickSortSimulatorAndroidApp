@@ -1,5 +1,6 @@
 package com.ledzinygamedevelopment.quicksortsimulator;
 
+import android.app.AlertDialog;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
@@ -8,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -39,6 +41,13 @@ public class Simulation extends Fragment {
     private LinkedHashMap<Integer, String> mapForCreator;
     private RelativeLayout relativeLayout;
     private View view;
+
+    //code view
+    private AlertDialog.Builder dialogBuilder;
+    private AlertDialog dialog;
+    private TextView codePopup;
+    private String codePopupText;
+
 
 
     public Simulation(SetupAndMainPage setupAndMainPage) {
@@ -84,6 +93,14 @@ public class Simulation extends Fragment {
             }
         });
 
+        Button show_code_button = view.findViewById(R.id.show_code);
+        show_code_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                createCodePopup();
+            }
+        });
+
         next_step_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -97,6 +114,26 @@ public class Simulation extends Fragment {
                                 setColor(pivot, Color.RED);
 
                                 currentState = QuickSortListPart.SHOW_GREATER_NUMBERS;
+
+                                //codePopup
+                                codePopupText = " Setting pivot at last place of first available array.";
+                                codePopupText += "\n Pivot value: " + pivot.getText();
+                                codePopupText += "\n Code: \n" +
+                                        "quickSort(array, leftmostIndex, rightmostIndex)\n" +
+                                        "  if (leftmostIndex < rightmostIndex)\n" +
+                                        "    pivotIndex <- partition(array,leftmostIndex, rightmostIndex)\n" +
+                                        "    quickSort(array, leftmostIndex, pivotIndex - 1)\n" +
+                                        "    quickSort(array, pivotIndex, rightmostIndex)\n" +
+                                        "\n" +
+                                        "partition(array, leftmostIndex, rightmostIndex)\n" +
+                                        "  set rightmostIndex as pivotIndex\n" +
+                                        "  storeIndex <- leftmostIndex - 1\n" +
+                                        "  for i <- leftmostIndex + 1 to rightmostIndex\n" +
+                                        "  if element[i] < pivotElement\n" +
+                                        "    swap element[i] and element[storeIndex]\n" +
+                                        "    storeIndex++\n" +
+                                        "  swap pivotElement and element[storeIndex+1]\n" +
+                                        "return storeIndex + 1";
                                 break;
                             case SHOW_GREATER_NUMBERS:
                                 for (int i = 0; i < allRequrencyQuickSortData.get(currentSortingArray).size() - 3; i++) {
@@ -110,6 +147,9 @@ public class Simulation extends Fragment {
                                 }
 
                                 currentState = QuickSortListPart.MOVE_GREATER_NUMBERS;
+
+                                //codePopup
+                                codePopupText = " Checking lower numbers than pivot (grey) and greater (green).";
                                 break;
                             case MOVE_GREATER_NUMBERS:
                                 int in = -1;
@@ -201,6 +241,9 @@ public class Simulation extends Fragment {
                                         setColor(textView, Color.RED);
                                     }
                                 }
+                                //codePopup
+                                codePopupText = " Moving smaller numbers before pivot and greater numbers after pivot.";
+                                codePopupText += "\n Splitting array into more arrays (for greater numbers, smaller numbers and pivot itself.";
                                 currentState = QuickSortListPart.SHOW_PIWOT;
                                 break;
                         }
@@ -218,10 +261,16 @@ public class Simulation extends Fragment {
                             }
                         }, 200);
                         currentSortingArray++;
+
+                        //codePopup
+                        codePopupText = " Array has only one value, not checking values because can't sort one value, moving to next unsorted array.";
                     }
                 } else {
                     refreshTextViews(allRequrencyQuickSortData);
                     Toast.makeText(getActivity(), "Array sorted! :)", Toast.LENGTH_SHORT).show();
+
+                    //codePopup
+                    codePopupText = " All values are sorted.";
                 }
             }
         });
@@ -258,6 +307,16 @@ public class Simulation extends Fragment {
             }
         }
         listViewCreator.createButtons(relativeLayout, view, mapForCreator, getActivity(), getResources(), getContext(), -2, allRequrencyQuickSortData);
+    }
+
+    public void createCodePopup() {
+        dialogBuilder = new AlertDialog.Builder(getContext());
+        final View codePopupView = getLayoutInflater().inflate(R.layout.popup, null);
+        codePopup = (TextView) codePopupView.findViewById(R.id.codePopup);
+        codePopup.setText(codePopupText);
+        dialogBuilder.setView(codePopupView);
+        dialog = dialogBuilder.create();
+        dialog.show();
     }
 
 }

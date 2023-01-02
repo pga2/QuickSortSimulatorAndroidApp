@@ -6,6 +6,7 @@
     <string name="return_to_setup">Return to setup</string>
     <string name="add_number">Add</string>
     <string name="repeat_simulation">Repeat simulation</string>
+    <string name="show_code">Show code</string>
     <string name="previous_step">Previous step</string>
     <string name="next_step">Next step</string>
     <string name="edit_text_setup_simulator">Type each number separate by .</string>
