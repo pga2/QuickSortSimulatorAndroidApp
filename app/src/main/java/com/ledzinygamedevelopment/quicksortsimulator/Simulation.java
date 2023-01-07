@@ -2,9 +2,16 @@ package com.ledzinygamedevelopment.quicksortsimulator;
 
 import android.app.AlertDialog;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.os.Handler;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.TextUtils;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.StyleSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +21,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
@@ -46,7 +54,7 @@ public class Simulation extends Fragment {
     private AlertDialog.Builder dialogBuilder;
     private AlertDialog dialog;
     private TextView codePopup;
-    private String codePopupText;
+    private Spannable codePopupText;
 
 
 
@@ -116,26 +124,40 @@ public class Simulation extends Fragment {
                                 currentState = QuickSortListPart.SHOW_GREATER_NUMBERS;
 
                                 //codePopup
-                                codePopupText = " Setting pivot at last place of first available array.";
-                                codePopupText += "\n Pivot value: " + pivot.getText();
-                                codePopupText += "\n Code: \n" +
-                                        "quickSort(array, leftmostIndex, rightmostIndex)\n" +
-                                        "  if (leftmostIndex < rightmostIndex)\n" +
-                                        "    pivotIndex <- partition(array,leftmostIndex, rightmostIndex)\n" +
-                                        "    quickSort(array, leftmostIndex, pivotIndex - 1)\n" +
-                                        "    quickSort(array, pivotIndex, rightmostIndex)\n" +
+                                codePopupText = spannableBuilder(new SpannableString(""), "  Setting pivot at last place of first available array.", Color.BLACK, Typeface.NORMAL);
+                                codePopupText = spannableBuilder(codePopupText, "\n  Array: ", Color.BLACK, Typeface.BOLD);
+                                LinkedHashMap<Integer, Integer> currentSortingArrayForUser = new LinkedHashMap<>();
+                                for (Integer key : allRequrencyQuickSortData.get(currentSortingArray).keySet()) {
+                                    if (!(key.equals(-2) || key.equals(-3))) {
+                                        currentSortingArrayForUser.put(key, allRequrencyQuickSortData.get(currentSortingArray).get(key));
+                                    }
+                                }
+                                codePopupText = spannableBuilder(codePopupText, currentSortingArrayForUser.toString(), Color.RED, Typeface.BOLD);
+                                codePopupText = spannableBuilder(codePopupText, "\n  Pivot value: ", Color.BLACK, Typeface.BOLD);
+                                codePopupText = spannableBuilder(codePopupText, pivot.getText().toString(), Color.RED, Typeface.BOLD);
+                                codePopupText = spannableBuilder(codePopupText, "\n  Code: \n" +
+                                        "  quickSort(array, leftmostIndex, rightmostIndex)" +
+                                        "\n    if (leftmostIndex < rightmostIndex)\n" +
+                                        "      pivotIndex <- \n        partition(array,leftmostIndex, rightmostIndex)\n" +
+                                        "      quickSort(array, leftmostIndex, pivotIndex - 1)\n" +
+                                        "      quickSort(array, pivotIndex, rightmostIndex)\n" +
                                         "\n" +
-                                        "partition(array, leftmostIndex, rightmostIndex)\n" +
-                                        "  set rightmostIndex as pivotIndex\n" +
-                                        "  storeIndex <- leftmostIndex - 1\n" +
-                                        "  for i <- leftmostIndex + 1 to rightmostIndex\n" +
-                                        "  if element[i] < pivotElement\n" +
-                                        "    swap element[i] and element[storeIndex]\n" +
-                                        "    storeIndex++\n" +
-                                        "  swap pivotElement and element[storeIndex+1]\n" +
-                                        "return storeIndex + 1";
+                                        "  partition(array, leftmostIndex, rightmostIndex)\n" +
+                                        "    set rightmostIndex as pivotIndex ", Color.BLACK, Typeface.NORMAL);
+                                codePopupText = spannableBuilder (codePopupText, "pivot index: ", Color.BLACK, Typeface.BOLD);
+                                        codePopupText = spannableBuilder (codePopupText, String.valueOf(allRequrencyQuickSortData.get(currentSortingArray).size() - 2), Color.RED, Typeface.BOLD);
+                                        codePopupText = spannableBuilder(codePopupText,"\n    storeIndex <- leftmostIndex - 1\n" +
+                                        "    for i <- leftmostIndex + 1 to rightmostIndex\n" +
+                                        "    if element[i] < pivotElement\n" +
+                                        "      swap element[i] and element[storeIndex]\n" +
+                                        "      storeIndex++\n" +
+                                        "    swap pivotElement and element[storeIndex+1]\n" +
+                                        "  return storeIndex + 1", Color.BLACK, Typeface.NORMAL);
                                 break;
                             case SHOW_GREATER_NUMBERS:
+
+                                //codePopup
+                                codePopupText = spannableBuilder(new SpannableString(""), " Checking lower numbers than pivot (grey) and greater (green).", Color.BLACK, Typeface.NORMAL);
                                 for (int i = 0; i < allRequrencyQuickSortData.get(currentSortingArray).size() - 3; i++) {
                                     if (allRequrencyQuickSortData.get(currentSortingArray).get(getByIndex(allRequrencyQuickSortData.get(currentSortingArray)).get(i)) >= allRequrencyQuickSortData.get(currentSortingArray).get(allRequrencyQuickSortData.get(currentSortingArray).get(-3))) {
                                         TextView higherNumber = relativeLayout.findViewById(getByIndex(allRequrencyQuickSortData.get(currentSortingArray)).get(i));
@@ -147,9 +169,6 @@ public class Simulation extends Fragment {
                                 }
 
                                 currentState = QuickSortListPart.MOVE_GREATER_NUMBERS;
-
-                                //codePopup
-                                codePopupText = " Checking lower numbers than pivot (grey) and greater (green).";
                                 break;
                             case MOVE_GREATER_NUMBERS:
                                 int in = -1;
@@ -201,7 +220,12 @@ public class Simulation extends Fragment {
                                     }
                                 }
 
-
+                                LinkedHashMap<Integer, Integer> lowPartMapSizeForUser = new LinkedHashMap<>();
+                                for (Integer key : lowPartMap.keySet()) {
+                                    if (!(key.equals(LOW_KEY_POSITION) || key.equals(HIGH_KEY_POSITION))) {
+                                        lowPartMapSizeForUser.put(key, lowPartMap.get(key));
+                                    }
+                                }
                                 if (lowPartMap.size() > 1) {
                                     lowPartMap.put(LOW_KEY_POSITION, 0);
                                     lowPartMap.put(HIGH_KEY_POSITION, getByIndex(lowPartMap).get(lowPartMap.size() - 2));
@@ -242,8 +266,32 @@ public class Simulation extends Fragment {
                                     }
                                 }
                                 //codePopup
-                                codePopupText = " Moving smaller numbers before pivot and greater numbers after pivot.";
-                                codePopupText += "\n Splitting array into more arrays (for greater numbers, smaller numbers and pivot itself.";
+                                codePopupText = spannableBuilder(new SpannableString(""), "  Moving smaller numbers before pivot and \n  greater numbers after pivot.", Color.BLACK, Typeface.NORMAL);
+                                codePopupText = spannableBuilder(codePopupText, "\n  Splitting array into more arrays \n  (for smaller numbers than pivot and greater).\n" /*+ " \n  Code: \n  partition(array, leftmostIndex, rightmostIndex)\n" +
+                                        "    set rightmostIndex as pivotIndex\n" +
+                                        "    storeIndex <- leftmostIndex - 1\n" +
+                                        "    for i <- leftmostIndex + 1 to rightmostIndex\n" +
+                                        "    if element[i] < pivotElement\n" +
+                                        "      swap element[i] and element[storeIndex]\n" +
+                                        "      storeIndex++\n" +
+                                        "    swap pivotElement and element[storeIndex+1]\n" +
+                                        "  return storeIndex + 1"*/, Color.BLACK, Typeface.NORMAL);
+                                codePopupText = spannableBuilder(codePopupText, "  Recursive quicksort call for smaller and greater\n  than pivot array:  ", Color.BLACK, Typeface.NORMAL);
+                                codePopupText = spannableBuilder(codePopupText, "\n  Code:\n" +
+                                        "    pivotIndex <- \n      partition(array,leftmostIndex, rightmostIndex)" , Color.BLACK, Typeface.NORMAL);
+                                codePopupText = spannableBuilder(codePopupText, "\n" +
+                                        "    quickSort(array, leftmostIndex, pivotIndex - 1)\n" +
+                                        "    quickSort(array, pivotIndex, rightmostIndex)", Color.RED, Typeface.NORMAL);
+
+                                /*codePopupText = spannableBuilder (codePopupText, "\n  Method returns pivot index after sorting \n", Color.BLACK, Typeface.NORMAL);
+                                codePopupText = spannableBuilder (codePopupText, "  Pivot index: ", Color.BLACK, Typeface.BOLD);
+                                codePopupText = spannableBuilder (codePopupText, String.valueOf(lowPartMapSizeForUser.size() + 1), Color.RED, Typeface.BOLD);
+                                codePopupText = spannableBuilder (codePopupText, "  Code: \n" +
+                                        "  quickSort(array, leftmostIndex, rightmostIndex)\n" +
+                                        "    if (leftmostIndex < rightmostIndex)\n" +
+                                        "      pivotIndex <- \n  partition(array,leftmostIndex, rightmostIndex)\n" +
+                                        "      quickSort(array, leftmostIndex, pivotIndex - 1)\n" +
+                                        "      quickSort(array, pivotIndex, rightmostIndex)", Color.BLACK, Typeface.NORMAL);*/
                                 currentState = QuickSortListPart.SHOW_PIWOT;
                                 break;
                         }
@@ -263,14 +311,22 @@ public class Simulation extends Fragment {
                         currentSortingArray++;
 
                         //codePopup
-                        codePopupText = " Array has only one value, not checking values because can't sort one value, moving to next unsorted array.";
+                        codePopupText = spannableBuilder(new SpannableString(""), "  Array has only one value,\n  not checking values because can't sort one value,\n  moving to next unsorted array.", Color.BLACK, Typeface.NORMAL);
+                        codePopupText = spannableBuilder(codePopupText, "\n  Code:  \n", Color.BLACK, Typeface.NORMAL);
+                        codePopupText = spannableBuilder(codePopupText, "  quickSort(array, leftmostIndex, rightmostIndex)\n", Color.BLACK, Typeface.NORMAL);
+                        codePopupText = spannableBuilder(codePopupText, "    if (leftmostIndex < rightmostIndex)\n", Color.RED, Typeface.NORMAL);
+                        codePopupText = spannableBuilder(codePopupText, "      pivotIndex \n        <- partition(array,leftmostIndex, rightmostIndex)\n", Color.BLACK, Typeface.NORMAL);
+                        codePopupText = spannableBuilder(codePopupText, "      quickSort(array, leftmostIndex, pivotIndex - 1)\n", Color.BLACK, Typeface.NORMAL);
+                        codePopupText = spannableBuilder(codePopupText, "      quickSort(array, pivotIndex, rightmostIndex)\n\n", Color.BLACK, Typeface.NORMAL);
+                        codePopupText = spannableBuilder(codePopupText, "  Red if conditon returns false, " +
+                                "\n  recursive quickSort method not called\n", Color.BLACK, Typeface.BOLD);
                     }
                 } else {
                     refreshTextViews(allRequrencyQuickSortData);
                     Toast.makeText(getActivity(), "Array sorted! :)", Toast.LENGTH_SHORT).show();
 
                     //codePopup
-                    codePopupText = " All values are sorted.";
+                    codePopupText = spannableBuilder(new SpannableString(""), " All values are sorted.", Color.BLACK, Typeface.NORMAL);
                 }
             }
         });
@@ -313,10 +369,18 @@ public class Simulation extends Fragment {
         dialogBuilder = new AlertDialog.Builder(getContext());
         final View codePopupView = getLayoutInflater().inflate(R.layout.popup, null);
         codePopup = (TextView) codePopupView.findViewById(R.id.codePopup);
-        codePopup.setText(codePopupText);
+
+        codePopup.setText(codePopupText, TextView.BufferType.SPANNABLE);
         dialogBuilder.setView(codePopupView);
         dialog = dialogBuilder.create();
         dialog.show();
+    }
+
+    public Spannable spannableBuilder(Spannable spannable, String newText, int color, int typeface) {
+        Spannable spannableNew = new SpannableString(newText);
+        spannableNew.setSpan(new ForegroundColorSpan(color), 0, newText.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        spannableNew.setSpan(new StyleSpan(typeface), 0, newText.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        return new SpannableString(TextUtils.concat(spannable, spannableNew));
     }
 
 }

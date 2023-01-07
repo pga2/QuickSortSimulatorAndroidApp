@@ -8,20 +8,21 @@
 
     <ImageView
         android:id="@+id/popupicon"
-        android:layout_width="53dp"
-        android:layout_height="60dp"
+        android:layout_width="44dp"
+        android:layout_height="40dp"
         android:background="@drawable/ic_baseline_code_24"
 
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.523"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.023" />
+        app:layout_constraintVertical_bias="0.007" />
 
     <TextView
         android:id="@+id/codePopup"
-        android:layout_width="352dp"
-        android:layout_height="333dp"
+        android:layout_width="342dp"
+        android:layout_height="603dp"
         android:layout_marginTop="4dp"
         android:text="TextView"
         app:layout_constraintEnd_toEndOf="parent"
